@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script>
+      let rootEl = document.getElementById("root");
+
+      let img = document.createElement("img");
+
+      function getJokeImgFromApi() {
+        fetchingImg().catch((error) => {
+          console.log(error.message);
+          console.log("request failed");
+        });
+
+        async function fetchingImg() {
+          const response = await fetch("https://xkcd.now.sh/?comic=latest");
+          //   console.log(response.status);
+          //   console.log(typeof response);
+          if (!response.ok) {
+            const message = `An error has occurred: ${response.status}`;
+            throw new Error(message);
+          }
+          const imgObj = await response.json();
+          console.log(imgObj);
+
+          img.src = imgObj.img;
+          img.style.width = "80%";
+          img.style.minHeight = "300px";
+
+          // console.log(imgObj);
+          return imgObj;
+        }
+      }
+      getJokeImgFromApi();
+
+      rootEl.appendChild(img);
+    </script>
+  </body>
+</html>
